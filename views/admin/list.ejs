@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>黑名单列表</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <div class="admin-nav">
+        <div class="nav-container">
+            <a href="/dext" class="nav-logo">云黑管理系统</a>
+            <ul class="nav-menu">
+                <li><a href="/dext">首页</a></li>
+                <li><a href="/dext/list" class="active">黑名单列表</a></li>
+                <li><a href="/dext/add">添加黑名单</a></li>
+                <li><a href="/dext/logout">退出登录</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>黑名单列表</h1>
+            <a href="/dext/add" class="btn btn-success">添加记录</a>
+        </div>
+
+        <div class="card">
+            <div class="card-header">所有记录</div>
+            <div class="card-body">
+                <% if (data.length===0) { %>
+                    <div class="alert alert-info text-center">暂无黑名单记录</div>
+                    <% } else { %>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>QQ号</th>
+                                        <th>风险等级</th>
+                                        <th>创建时间</th>
+                                        <th>更新时间</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% data.forEach(item=> { %>
+                                        <tr>
+                                            <td>
+                                                <%= item.qq %>
+                                            </td>
+                                            <td>
+                                                <% if (item.level==='high' ) { %>
+                                                    <span class="level-badge level-high">高风险</span>
+                                                    <% } else if (item.level==='medium' ) { %>
+                                                        <span class="level-badge level-medium">中风险</span>
+                                                        <% } else { %>
+                                                            <span class="level-badge level-low">低风险</span>
+                                                            <% } %>
+                                            </td>
+                                            <td>
+                                                <%= new Date(item.created_at).toLocaleDateString() %>
+                                            </td>
+                                            <td>
+                                                <%= new Date(item.updated_at).toLocaleDateString() %>
+                                            </td>
+                                            <td>
+                                                <a href="/dext/edit?qq=<%= item.qq %>"
+                                                    class="btn btn-sm btn-warning">编辑</a>
+                                                <a href="/dext/del?qq=<%= item.qq %>" class="btn btn-sm btn-danger"
+                                                    onclick="return confirm('确定要删除这条记录吗？')">删除</a>
+                                            </td>
+                                        </tr>
+                                        <% }); %>
+                                </tbody>
+                            </table>
+                        </div>
+                        <% } %>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

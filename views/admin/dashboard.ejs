@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>后台管理</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <div class="admin-nav">
+        <div class="nav-container">
+            <a href="/dext" class="nav-logo">云黑管理系统</a>
+            <ul class="nav-menu">
+                <li><a href="/dext" class="active">首页</a></li>
+                <li><a href="/dext/list">黑名单列表</a></li>
+                <li><a href="/dext/add">添加黑名单</a></li>
+                <li><a href="/dext/logout">退出登录</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1 class="mb-4">管理控制台</h1>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card stats-card">
+                    <div class="stats-number">
+                        <%= count %>
+                    </div>
+                    <div class="stats-label">黑名单记录总数</div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">快捷操作</div>
+                    <div class="card-body">
+                        <a href="/dext/add" class="btn btn-primary w-100 mb-3">添加黑名单</a>
+                        <a href="/dext/list" class="btn btn-success w-100">查看所有记录</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-header">系统说明</div>
+            <div class="card-body">
+                <h3>BUG</h3>
+                <p>BUG反馈1163246049</p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

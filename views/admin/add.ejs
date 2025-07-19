@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>添加黑名单</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/script.js" defer></script>
+</head>
+
+<body>
+    <div class="admin-nav">
+        <div class="nav-container">
+            <a href="/dext" class="nav-logo">云黑管理系统</a>
+            <ul class="nav-menu">
+                <li><a href="/dext">首页</a></li>
+                <li><a href="/dext/list">黑名单列表</a></li>
+                <li><a href="/dext/add" class="active">添加黑名单</a></li>
+                <li><a href="/dext/logout">退出登录</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1 class="mb-4">添加黑名单记录</h1>
+
+        <div class="card">
+            <div class="card-header">填写信息</div>
+            <div class="card-body">
+                <form action="/dext/add" method="POST">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="label">QQ号 <span class="text-danger">*</span></label>
+                                <input type="text" name="qq" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="label">风险等级 <span class="text-danger">*</span></label>
+                                <select name="level" class="form-control" required>
+                                    <option value="high">高风险</option>
+                                    <option value="medium" selected>中风险</option>
+                                    <option value="low">低风险</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label">内容详情 (Markdown格式) <span class="text-danger">*</span></label>
+                        <textarea name="content" class="form-control" rows="8" required
+                            placeholder="请输入详细的黑名单原因，支持Markdown格式..."></textarea>
+                        <button type="button" id="btnImageManager" class="btn btn-info mt-2">
+                            <i class="icon-image"></i> 管理图片
+                        </button>
+                    </div>
+
+                    <div class="form-group mt-4">
+                        <button type="submit" class="btn btn-primary">添加记录</button>
+                        <a href="/dext/list" class="btn btn-secondary">取消</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 图片管理器模态框 -->
+    <div id="imageModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">图片管理器</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div class="image-manager-container">
+                <div class="upload-section">
+                    <h3>上传新图片</h3>
+                    <form id="uploadForm" class="upload-form">
+                        <input type="file" id="imageFile" name="image" accept="image/*" required>
+                        <button type="submit" class="upload-btn">上传图片</button>
+                    </form>
+                </div>
+
+                <div class="image-section">
+                    <h3>可用图片</h3>
+                    <div id="imageList" class="image-list">
+                        <!-- 图片列表将通过JavaScript动态加载 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

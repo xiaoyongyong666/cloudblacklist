@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>安装成功</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #3498db;
+            --success: #2ecc71;
+            --dark: #2c3e50;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e7f1 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .success-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+        }
+
+        .success-icon {
+            width: 100px;
+            height: 100px;
+            background: var(--success);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            font-size: 3rem;
+        }
+
+        h1 {
+            color: var(--dark);
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #666;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .success-info {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .info-item {
+            display: flex;
+            margin-bottom: 15px;
+        }
+
+        .info-label {
+            width: 150px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .info-value {
+            flex: 1;
+            color: #555;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), #2980b9);
+            color: white;
+            border: none;
+        }
+
+        .btn-outline {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="success-container">
+        <div class="success-icon">✓</div>
+        <h1>系统安装成功！</h1>
+        <p>Starpixel云黑系统已成功安装并配置完成 现在您可以开始使用系统功能</p>
+
+        <div class="success-info">
+            <div class="info-item">
+                <div class="info-label">系统版本：</div>
+                <div class="info-value">云黑系统 <%= package.version %>
+                </div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">安装时间：</div>
+                <div class="info-value">
+                    <%=new Date(new Date(config.installedAt) + 8 * 60 * 60 * 1000).toLocaleString('zh-CN', {
+                        timeZone: 'Asia/Shanghai' , year: 'numeric' , month: '2-digit' , day: '2-digit' ,
+                        hour: '2-digit' , minute: '2-digit' , second: '2-digit' , hour12: false, fractionalSecondDigits:
+                        3 }) %>
+                </div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">数据库：</div>
+                <div class="info-value">MySQL -> <%= cfg.dbConfig.database %></div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">管理员账户：</div>
+                <div class="info-value"><%= config.dbConfig.user %> </div>
+            </div>
+        </div>
+
+        <p><strong>重要提示：</strong> 建议您立即登录系统并修改默认管理员密码。</p>
+
+        <div class="btn-group">
+            <a href="/" class="btn btn-primary">访问首页</a>
+            <a href="/dext/login" class="btn btn-outline">登录后台管理</a>
+        </div>
+    </div>
+</body>
+
+</html>

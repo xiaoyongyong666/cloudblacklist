@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>系统安装向导</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #3498db;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e7f1 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: #333;
+        }
+
+        .install-container {
+            max-width: 900px;
+            width: 100%;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+            overflow: hidden;
+        }
+
+        .install-header {
+            background: linear-gradient(135deg, var(--dark), #1a2530);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .install-header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+        }
+
+        .install-header p {
+            opacity: 0.9;
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .install-body {
+            padding: 40px;
+        }
+
+        .progress-container {
+            margin-bottom: 40px;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .progress-steps::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #e9ecef;
+            z-index: 1;
+        }
+
+        .step {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: #e9ecef;
+            color: #6c757d;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .step.active .step-number {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 0 0 5px rgba(52, 152, 219, 0.2);
+        }
+
+        .step.completed .step-number {
+            background: var(--success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.95rem;
+            color: #6c757d;
+            font-weight: 500;
+        }
+
+        .step.active .step-label {
+            color: var(--dark);
+        }
+
+        .install-form {
+            background: #fff;
+            border-radius: 10px;
+            padding: 30px;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .form-section h3 {
+            color: var(--dark);
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+        }
+
+        .form-section h3 i {
+            margin-right: 12px;
+            color: var(--primary);
+            background: rgba(52, 152, 219, 0.1);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: block;
+            color: #495057;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background: #f8f9fa;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            outline: none;
+            background: #fff;
+        }
+
+        .btn-install {
+            background: linear-gradient(135deg, var(--primary), #2980b9);
+            color: white;
+            border: none;
+            padding: 16px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: block;
+            width: 100%;
+            margin-top: 20px;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn-install:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+        }
+
+        .btn-install:active {
+            transform: translateY(-1px);
+        }
+
+        .alert {
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .alert-danger {
+            background-color: #fef3f2;
+            color: #d92c20;
+            border: 1px solid #fecdca;
+        }
+
+        .alert i {
+            margin-right: 12px;
+            font-size: 1.4rem;
+        }
+
+        .system-info {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 30px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .system-info h4 {
+            margin-bottom: 18px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+        }
+
+        .system-info h4 i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .info-item i {
+            width: 36px;
+            height: 36px;
+            background: rgba(52, 152, 219, 0.1);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            font-size: 1.1rem;
+        }
+
+        .info-text {
+            font-size: 0.95rem;
+        }
+
+        .info-text strong {
+            display: block;
+            margin-bottom: 4px;
+            color: var(--dark);
+        }
+
+        @media (max-width: 768px) {
+            .install-header {
+                padding: 30px 20px;
+            }
+
+            .install-header h1 {
+                font-size: 2.2rem;
+            }
+
+            .install-body {
+                padding: 25px;
+            }
+        }
+
+        .test-connection {
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .test-connection-btn {
+            background: #e9ecef;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .test-connection-btn:hover {
+            background: #dee2e6;
+        }
+
+        .connection-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-failure {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-icon {
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="install-container">
+        <div class="install-header">
+            <h1><i class="fas fa-cloud"></i> 云黑系统安装向导</h1>
+            <p>欢迎使用云黑系统，请按照以下步骤完成系统初始安装</p>
+        </div>
+
+        <div class="install-body">
+            <div class="progress-container">
+                <div class="progress-steps">
+                    <div class="step active">
+                        <div class="step-number">1</div>
+                        <div class="step-label">数据库配置</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-label">管理员设置</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-label">系统初始化</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-label">完成安装</div>
+                    </div>
+                </div>
+            </div>
+
+            <% if (typeof error !=='undefined' ) { %>
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div>
+                        <%= error %>
+                    </div>
+                </div>
+                <% } %>
+
+                    <form class="install-form" id="installForm" action="/install-process" method="POST">
+                        <div class="form-section">
+                            <h3><i class="fas fa-database"></i> 数据库配置</h3>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label">数据库主机</label>
+                                        <input type="text" name="dbHost" class="form-control"
+                                            value="<%= formData.dbHost %>" required placeholder="例如: localhost">
+                                        <small class="form-text text-muted">通常为 localhost 或 127.0.0.1</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label">数据库名称</label>
+                                        <input type="text" name="dbName" class="form-control"
+                                            value="<%= formData.dbName %>" required placeholder="例如: cloud_blacklist">
+                                        <small class="form-text text-muted">系统将创建此数据库</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label">数据库用户名</label>
+                                        <input type="text" name="dbUser" class="form-control"
+                                            value="<%= formData.dbUser %>" required placeholder="例如: root">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label">数据库密码</label>
+                                        <input type="password" name="dbPassword" class="form-control"
+                                            value="<%= formData.dbPassword %>" placeholder="数据库密码" id="dbPasswordIpt">
+                                        <small class="form-text text-muted">如果未设置密码请留空</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="form-label">数据表前缀</label>
+                                        <input type="text" name="dbPrefix" class="form-control"
+                                            value="<%= formData.dbPrefix %>" required placeholder="默认cb_">
+                                        <small class="form-text text-muted">前缀默认"cb_"</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="test-connection">
+                                <button type="button" id="testConnection" class="test-connection-btn">
+                                    <i class="fas fa-plug"></i> 测试数据库连接
+                                </button>
+                                <div class="connection-status" id="connectionStatus"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3><i class="fas fa-user-shield"></i> 管理员账户设置</h3>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label">管理员用户名</label>
+                                        <input type="text" name="adminUser" class="form-control"
+                                            value="<%= formData.adminUser %>" required placeholder="设置管理员用户名">
+                                        <small class="form-text text-muted">用于登录后台管理</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label">管理员密码</label>
+                                        <input type="password" name="adminPassword" class="form-control"
+                                            value="<%= formData.adminPassword %>" required placeholder="设置管理员密码">
+                                        <small class="form-text text-muted">请使用强密码，至少8个字符</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-install">
+                            <i class="fas fa-bolt"></i> 开始安装系统
+                        </button>
+                    </form>
+
+                    <div class="system-info">
+                        <h4><i class="fas fa-info-circle"></i> 常见数据库配置问题</h4>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <div class="info-text">
+                                    <strong>连接被拒绝</strong>
+                                    <div>检查MySQL服务是否运行</div>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-user-lock"></i>
+                                <div class="info-text">
+                                    <strong>访问被拒绝</strong>
+                                    <div>检查用户名/密码是否正确</div>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-key"></i>
+                                <div class="info-text">
+                                    <strong>权限不足</strong>
+                                    <div>确保用户有创建数据库权限</div>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-network-wired"></i>
+                                <div class="info-text">
+                                    <strong>远程连接</strong>
+                                    <div>检查防火墙和远程访问设置</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        </div>
+    </div>
+
+    <script>
+        // 表单验证
+        document.getElementById('installForm').addEventListener('submit', function (e) {
+            const adminPass = document.querySelector('input[name="adminPassword"]').value;
+            const dbName = document.querySelector('input[name="dbName"]').value;
+
+            // 密码长度验证
+            if (adminPass.length < 8) {
+                alert('管理员密码长度至少为8个字符');
+                e.preventDefault();
+                return;
+            }
+
+            // 数据库名称格式验证
+            if (!dbName.match(/^[a-z0-9_]+$/i)) {
+                alert('数据库名称只能包含字母、数字和下划线');
+                e.preventDefault();
+            }
+        });
+
+        // 测试数据库连接
+        document.getElementById('testConnection').onclick = function () {
+            testDb()
+        };
+
+
+        async function testDb() {
+            const dbHost = document.querySelector('input[name="dbHost"]').value;
+            const dbUser = document.querySelector('input[name="dbUser"]').value;
+            const dbPassword = document.querySelector('input[name="dbPassword"]').value;
+            const dbName = document.querySelector('input[name="dbName"]').value;
+            const dbPrefix = document.querySelector('input[name="dbPrefix"]').value;
+
+            const statusElement = document.getElementById('connectionStatus');
+            statusElement.innerHTML = '';
+
+            // 基本前端验证
+            if (!dbHost || !dbUser || !dbName || !dbPrefix) {
+                statusElement.className = 'connection-status status-failure';
+                statusElement.innerHTML = '<i class="fas fa-exclamation-circle status-icon"></i> 请填写必要字段';
+                return;
+            }
+
+            // 显示测试中状态
+            const statusIndicator = document.createElement('div');
+            statusIndicator.className = 'connection-status status-pending';
+            statusIndicator.innerHTML = '<i class="fas fa-spinner fa-spin status-icon"></i> 正在测试连接...';
+            statusElement.appendChild(statusIndicator);
+
+            try {
+                const response = await fetch('/test-db-connection', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ dbHost, dbUser, dbPassword, dbName, dbPrefix })
+                });
+
+                const result = await response.json();
+
+                statusElement.innerHTML = '';
+                const resultElement = document.createElement('div');
+
+                if (result.success) {
+                    resultElement.className = 'connection-status status-success';
+                    resultElement.innerHTML = '<i class="fas fa-check-circle status-icon"></i> 连接成功';
+                } else {
+                    resultElement.className = 'connection-status status-failure';
+
+                    // 常见错误消息优化
+                    let errorMessage = result.error;
+                    if (errorMessage.includes('ECONNREFUSED')) {
+                        errorMessage = '连接被拒绝，请检查MySQL服务是否运行';
+                    } else if (errorMessage.includes('ER_ACCESS_DENIED_ERROR')) {
+                        errorMessage = '访问被拒绝，请检查用户名/密码';
+                    } else if (errorMessage.includes('ER_DBACCESS_DENIED_ERROR')) {
+                        errorMessage = '权限不足，无法创建数据库';
+                    }
+
+                    resultElement.innerHTML = `<i class="fas fa-times-circle status-icon"></i> ${errorMessage}`;
+                }
+
+                statusElement.appendChild(resultElement);
+            } catch (error) {
+                statusElement.innerHTML = '';
+                const errorElement = document.createElement('div');
+                errorElement.className = 'connection-status status-failure';
+                errorElement.innerHTML = '<i class="fas fa-times-circle status-icon"></i> 连接测试失败';
+                statusElement.appendChild(errorElement);
+            }
+        }
+    </script>
+</body>
+
+</html>

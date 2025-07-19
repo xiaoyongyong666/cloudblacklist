@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Starpixel云黑系统</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>Starpixel云黑系统</h1>
+            <p>Starpixel/xiaoyong制作的超牛逼云黑</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="card stats-card">
+            <h2>当前云黑数据库统计</h2>
+            <div class="stats-number">
+                <%= count %>
+            </div>
+            <div class="stats-label">条黑名单记录</div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">黑名单查询</div>
+            <div class="card-body">
+                <form action="/result" method="GET" class="search-form">
+                    <input type="text" name="qq" placeholder="请输入QQ号" required>
+                    <input type="hidden" name="mode" value="html">
+                    <button type="submit">查询</button>
+                </form>
+                <div class="text-center">
+                    <p>请输入需要查询的QQ号</p>
+                    <p>查询模式：<code>default</code> 或 <code>html</code> 返回精美展示页面，<code>data</code> 返回原始数据</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">系统说明</div>
+            <div class="card-body">
+                <div class="features">
+                    <div class="feature">
+                        <h3>什么是云黑系统？</h3>
+                        <p>云黑系统是一个共享的黑名单数据库，旨在帮助社区成员识别不良行为者，维护良好的社区环境。</p>
+                    </div>
+
+                    <div class="feature">
+                        <h3>如何使用？</h3>
+                        <p>在输入框中输入需要查询的QQ号，点击查询按钮即可查看该QQ号是否在云黑名单中。</p>
+                    </div>
+
+                    <div class="feature">
+                        <h3>数据来源</h3>
+                        <p>所有数据均由dext添加 有事找dext</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="container">
+            <p>© 2025 云黑系统 | 维护社区环境 共建和谐网络 | Made by Starpixel/xiaoyong</p>
+        </div>
+    </div>
+</body>
+
+</html>

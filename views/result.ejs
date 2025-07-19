@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>查询结果 - <%= data.qq %>
+    </title>
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- 引入highlight.js样式 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/github-dark.min.css">
+</head>
+
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>黑名单查询结果</h1>
+            <p>QQ号: <%= data.qq %> 的云黑记录</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-header">查询详情</div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label class="label">QQ号</label>
+                            <div class="form-control">
+                                <%= data.qq %>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label class="label">黑名单等级</label>
+                            <div>
+                                <% if (data.level==='high' ) { %>
+                                    <span class="level-badge level-high">高风险</span>
+                                    <% } else if (data.level==='medium' ) { %>
+                                        <span class="level-badge level-medium">中风险</span>
+                                        <% } else { %>
+                                            <span class="level-badge level-low">低风险</span>
+                                            <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label class="label">记录时间</label>
+                            <div class="form-control">
+                                <%= new Date(data.created_at).toLocaleString() %>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label class="label">最后更新时间</label>
+                            <div class="form-control">
+                                <%= new Date(data.updated_at).toLocaleString() %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="label">黑名单详情</label>
+                    <div class="markdown-content">
+                        <!-- 使用转换后的HTML内容 -->
+                        <%- data.contentHtml %>
+                    </div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <a href="/" class="btn btn-primary">返回首页</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="container">
+            <p>© 2025 云黑查询系统 | 数据更新时间: <%= new Date().toLocaleString() %> | Starpixel/xiaoyong
+            </p>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
+        });
+    </script>
+</body>
+
+</html>

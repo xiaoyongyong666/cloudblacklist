@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理员登录</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>Starpixel云黑管理</h1>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="login-container">
+            <h2 class="text-center">管理员登录</h2>
+
+            <% if (typeof error !=='undefined' ) { %>
+                <div class="alert alert-danger">
+                    <%= error %>
+                </div>
+                <% } %>
+
+                    <form action="/dext/login" method="POST">
+                        <div class="form-group">
+                            <label class="label">用户名</label>
+                            <input type="text" name="username" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="label">密码</label>
+                            <input type="password" name="password" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary w-100">登录</button>
+                        </div>
+                    </form>
+        </div>
+    </div>
+</body>
+
+</html>
