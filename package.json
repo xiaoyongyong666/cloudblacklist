@@ -3,10 +3,11 @@
   "version": "1.0.0-beta",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "commit": "node -e \"const msg = process.argv[1]; require('child_process').execSync('git add . && git commit -m \\\"' + msg + '\\\"', { stdio: 'inherit' });\"",
+    "push": "git push origin main"
   },
   "author": "starpixel/xiaoyong",
-  "license": "ISC",
+  "license": "GPL-3.0-only",
   "description": "",
   "dependencies": {
     "body-parser": "^2.2.0",
