@@ -34,14 +34,6 @@ const cfg = require('./config')
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const ACCOUNT_FILE = 'ac.json';
-if (!fs.existsSync(ACCOUNT_FILE)) {
-    fs.writeFileSync(ACCOUNT_FILE, JSON.stringify({
-        username: 'admin',
-        password: 'password'
-    }, null, 2));
-}
-
 marked.setOptions({
     breaks: true,
     gfm: true,
@@ -133,7 +125,8 @@ app.post('/install-process', async (req, res) => {
                     host: dbHost,
                     user: dbUser,
                     database: dbName,
-                    prefix: dbPrefix
+                    prefix: dbPrefix,
+                    pwd: dbPassword
                 }
             };
             fs.writeFileSync('install.lock', JSON.stringify(lockData, null, 2));
@@ -157,7 +150,7 @@ app.post('/install-process', async (req, res) => {
 
 app.get('/install-success', (req, res) => {
     if (isInstalled) {
-        let user = db
+        let user = db.getAccountName()
         let config = JSON.parse(fs.readFileSync('./install.lock', 'utf8'))
         res.render('install-success', { package, config, user });
     } else {

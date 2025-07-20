@@ -5,3 +5,7 @@ logs
 package-lock.json
 
 .gitignore
+
+install.lock
+
+debug

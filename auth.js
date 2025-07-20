@@ -1,5 +1,7 @@
 const fs = require('fs');
 const path = require('path');
+const db = require('./db');
+const md5 = require('md5');
 
 const ACCOUNT_FILE = path.join(__dirname, 'ac.json');
 
@@ -7,9 +9,11 @@ function authenticate(req, res, next) {
     const { username, password } = req.body;
 
     try {
-        const credentials = JSON.parse(fs.readFileSync(ACCOUNT_FILE, 'utf8'));
 
-        if (username === credentials.username && password === credentials.password) {
+        const dbuser = db.getAccountName();
+        const dbpwd = db.getAccountPwd();
+
+        if (username === dbuser && md5(password) === dbpwd) {
             req.session.authenticated = true;
             req.session.username = username;
             next();

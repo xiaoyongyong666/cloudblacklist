@@ -1,25 +1,13 @@
 const mysql = require('mysql2/promise');
 const fs = require('fs');
 const md5 = require('md5');
-
-let dbConfig = {
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'cloud_blacklist',
-    prefix: 'cb_',
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
-};
+var cfg = require('./config');
 
 if (fs.existsSync('install.lock')) {
     try {
-        const lockData = JSON.parse(fs.readFileSync('install.lock', 'utf8'));
-        // 更新配置而不是重新赋值
-        Object.assign(dbConfig, lockData.dbConfig);
+        initPool()
     } catch (err) {
-        console.error('读取安装配置失败，使用默认配置', err);
+        console.error('读取安装配置失败 请重新安装', err);
     }
 }
 
@@ -27,14 +15,37 @@ if (fs.existsSync('install.lock')) {
 var pool = null;
 
 function initPool() {
+    if (cfg == null) {
+        let config = JSON.parse(fs.readFileSync('./install.lock', 'utf8'))
+        cfg = config;
+        pool = mysql.createPool({
+            host: config.dbConfig.host,
+            user: config.dbConfig.user,
+            password: config.dbConfig.pwd,
+            database: config.dbConfig.database,
+            waitForConnections: true,
+            connectionLimit: 10,
+            queueLimit: 0
+        });
+        return pool;
+    }
     if (!pool) {
-        pool = mysql.createPool(dbConfig);
+        pool = mysql.createPool({
+            host: cfg.dbConfig.host,
+            user: cfg.dbConfig.user,
+            password: cfg.dbConfig.pwd,
+            database: cfg.dbConfig.database,
+            waitForConnections: true,
+            connectionLimit: 10,
+            queueLimit: 0
+        });
     }
     return pool;
 }
 
 async function installDatabase(config, adminUser, adminPassword) {
     try {
+        let pwd = md5(adminPassword);
         // 创建临时连接（不指定数据库）
         const tempPool = mysql.createPool({
             host: config.host,
@@ -73,29 +84,25 @@ async function installDatabase(config, adminUser, adminPassword) {
 
         await connection.query(
             `INSERT INTO ${config.prefix}system (username, password) VALUES (?, ?)`,
-            [adminUser, adminPassword]
+            [adminUser, pwd]
         )
 
         connection.release();
         await tempPool.end();
 
-        // 更新全局配置（不重新赋值常量）
-        Object.assign(dbConfig, {
-            host: config.host,
-            user: config.user,
-            password: config.password,
-            database: config.database
-        });
-
-        // 初始化主连接池
-        initPool();
-
-        // 创建管理员账户
-        const acData = {
-            username: adminUser,
-            password: adminPassword
+        const lockData = {
+            installedAt: new Date().toISOString(),
+            dbConfig: {
+                host: config.host,
+                user: config.user,
+                database: config.database,
+                prefix: config.prefix,
+                pwd: config.password
+            }
         };
-        fs.writeFileSync('ac.json', JSON.stringify(acData, null, 2));
+        fs.writeFileSync('install.lock', JSON.stringify(lockData, null, 2));
+
+        initPool()
 
         return { success: true };
     } catch (err) {
@@ -117,7 +124,7 @@ function getPool() {
 // 获取黑名单
 async function getBlacklist(qq) {
     try {
-        const [rows] = await pool.query(`SELECT * FROM ${db.prefix}blacklist WHERE qq = ?`, [qq]);
+        const [rows] = await pool.query(`SELECT * FROM ${cfg.dbConfig.prefix}blacklist WHERE qq = ?`, [qq]);
         return rows[0] || null;
     } catch (err) {
         throw err;
@@ -127,7 +134,7 @@ async function getBlacklist(qq) {
 // 获取所有黑名单
 async function getAllBlacklists() {
     try {
-        const [rows] = await pool.query(`SELECT * FROM ${db.prefix}blacklist`);
+        const [rows] = await pool.query(`SELECT * FROM ${cfg.dbConfig.prefix}blacklist`);
         return rows;
     } catch (err) {
         throw err;
@@ -138,7 +145,7 @@ async function getAllBlacklists() {
 async function addBlacklist({ qq, level, content }) {
     try {
         const [result] = await pool.query(
-            `INSERT INTO ${db.prefix}blacklist (qq, level, content) VALUES (?, ?, ?)`,
+            `INSERT INTO ${cfg.dbConfig.prefix}blacklist (qq, level, content) VALUES (?, ?, ?)`,
             [qq, level, content]
         );
         return result.insertId;
@@ -151,7 +158,7 @@ async function addBlacklist({ qq, level, content }) {
 async function updateBlacklist({ qq, level, content }) {
     try {
         const [result] = await pool.query(
-            `UPDATE ${db.prefix}blacklist SET level = ?, content = ? WHERE qq = ?`,
+            `UPDATE ${cfg.dbConfig.prefix}blacklist SET level = ?, content = ? WHERE qq = ?`,
             [level, content, qq]
         );
         return result.affectedRows;
@@ -163,7 +170,7 @@ async function updateBlacklist({ qq, level, content }) {
 // 删除黑名单
 async function deleteBlacklist(qq) {
     try {
-        const [result] = await pool.query(`DELETE FROM ${db.prefix}blacklist WHERE qq = ?`, [qq]);
+        const [result] = await pool.query(`DELETE FROM ${cfg.dbConfig.prefix}blacklist WHERE qq = ?`, [qq]);
         return result.affectedRows;
     } catch (err) {
         throw err;
@@ -173,21 +180,37 @@ async function deleteBlacklist(qq) {
 // 获取黑名单数量
 async function getBlacklistCount() {
     try {
-        const [rows] = await pool.query(`SELECT COUNT(*) AS count FROM ${db.prefix}blacklist`);
+        const [rows] = await pool.query(`SELECT COUNT(*) AS count FROM ${cfg.dbConfig.prefix}blacklist`);
         return rows[0].count;
     } catch (err) {
         throw err;
     }
 }
 
-async function getAccount() {
+async function getAccountName() {
     try {
-        const [rows] = await pool.query(`SELECT * FROM ${db.prefix}system`);
+        const [rows] = await pool.query(`SELECT username FROM ${cfg.dbConfig.prefix}system`);
+        console.log("name")
+        console.log(rows)
         return rows[0] || null;
     } catch (err) {
         throw err;
     }
 }
+
+async function getAccountPwd() {
+    try {
+        const [rows] = await pool.query(`SELECT password FROM ${cfg.dbConfig.prefix}system`);
+        console.log("pwd")
+        console.log(rows)
+        return rows[0] || null;
+    } catch (err) {
+        throw err;
+    }
+}
+
+
+
 
 module.exports = {
     installDatabase,
@@ -198,5 +221,6 @@ module.exports = {
     updateBlacklist,
     deleteBlacklist,
     getBlacklistCount,
-    getAccount
+    getAccountName,
+    getAccountPwd
 };
