@@ -148,9 +148,9 @@ app.post('/install-process', async (req, res) => {
     }
 });
 
-app.get('/install-success', (req, res) => {
+app.get('/install-success', async (req, res) => {
     if (isInstalled) {
-        let user = db.getAccountName()
+        let user = await db.getAccountName()
         let config = JSON.parse(fs.readFileSync('./install.lock', 'utf8'))
         res.render('install-success', { package, config, user });
     } else {
@@ -304,7 +304,7 @@ app.post('/admin/login', auth.authenticate, (req, res) => {
 
 app.get('/admin/logout', (req, res) => {
     req.session.destroy();
-    res.redirect('/admin/login');
+    res.redirect('/');
 });
 
 app.use('/admin', auth.checkAdmin);
@@ -312,7 +312,7 @@ app.use('/admin', auth.checkAdmin);
 app.get('/admin', async (req, res) => {
     try {
         const count = await db.getBlacklistCount();
-        res.render('admin/dashboard', { count });
+        res.render('admin/dashboard', { count, currentPage: "home" });
     } catch (err) {
         res.status(500).send('服务器错误');
     }
@@ -321,14 +321,14 @@ app.get('/admin', async (req, res) => {
 app.get('/admin/list', async (req, res) => {
     try {
         const data = await db.getAllBlacklists();
-        res.render('admin/list', { data });
+        res.render('admin/list', { data, currentPage: "list" });
     } catch (err) {
         res.status(500).send('服务器错误');
     }
 });
 
 app.get('/admin/add', (req, res) => {
-    res.render('admin/add');
+    res.render('admin/add', { currentPage: "add" });
 });
 
 app.post('/admin/add', async (req, res) => {
@@ -395,7 +395,7 @@ app.get('/admin/del', async (req, res) => {
 });
 
 app.use((req, res) => {
-    res.status(404).send('404 - 页面未找到');
+    res.status(404).send(fs.readFileSync(path.join(__dirname, 'public', 'errors', '404.html'), 'utf-8'));
 });
 
 app.listen(PORT, () => {

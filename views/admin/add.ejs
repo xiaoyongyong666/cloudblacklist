@@ -2,25 +2,11 @@
 <html lang="zh-CN">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>添加黑名单</title>
-    <link rel="stylesheet" href="/css/style.css">
-    <script src="/js/script.js" defer></script>
+    <%- include('partials/admin-head', { title: '添加黑名单' }) %>
 </head>
 
 <body>
-    <div class="admin-nav">
-        <div class="nav-container">
-            <a href="/admin" class="nav-logo">云黑管理系统</a>
-            <ul class="nav-menu">
-                <li><a href="/admin">首页</a></li>
-                <li><a href="/admin/list">黑名单列表</a></li>
-                <li><a href="/admin/add" class="active">添加黑名单</a></li>
-                <li><a href="/admin/logout">退出登录</a></li>
-            </ul>
-        </div>
-    </div>
+    <%- include('partials/admin-nav') %>
 
     <div class="container">
         <h1 class="mb-4">添加黑名单记录</h1>

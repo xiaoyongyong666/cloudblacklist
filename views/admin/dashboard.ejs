@@ -2,24 +2,11 @@
 <html lang="zh-CN">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>后台管理</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <%- include('partials/admin-head', { title: '控制台' }) %>
 </head>
 
 <body>
-    <div class="admin-nav">
-        <div class="nav-container">
-            <a href="/admin" class="nav-logo">云黑管理系统</a>
-            <ul class="nav-menu">
-                <li><a href="/admin" class="active">首页</a></li>
-                <li><a href="/admin/list">黑名单列表</a></li>
-                <li><a href="/admin/add">添加黑名单</a></li>
-                <li><a href="/admin/logout">退出登录</a></li>
-            </ul>
-        </div>
-    </div>
+    <%- include('partials/admin-nav') %>
 
     <div class="container">
         <h1 class="mb-4">管理控制台</h1>

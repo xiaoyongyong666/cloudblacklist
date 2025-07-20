@@ -3,8 +3,12 @@ const fs = require('fs');
 const md5 = require('md5');
 var cfg = require('./config');
 
+
+var pool = null;
+
 if (fs.existsSync('install.lock')) {
     try {
+        console.log(1)
         initPool()
     } catch (err) {
         console.error('读取安装配置失败 请重新安装', err);
@@ -12,7 +16,7 @@ if (fs.existsSync('install.lock')) {
 }
 
 
-var pool = null;
+
 
 function initPool() {
     if (cfg == null) {
@@ -29,7 +33,7 @@ function initPool() {
         });
         return pool;
     }
-    if (!pool) {
+    if (pool == null) {
         pool = mysql.createPool({
             host: cfg.dbConfig.host,
             user: cfg.dbConfig.user,
@@ -190,8 +194,6 @@ async function getBlacklistCount() {
 async function getAccountName() {
     try {
         const [rows] = await pool.query(`SELECT username FROM ${cfg.dbConfig.prefix}system`);
-        console.log("name")
-        console.log(rows)
         return rows[0] || null;
     } catch (err) {
         throw err;
@@ -201,8 +203,6 @@ async function getAccountName() {
 async function getAccountPwd() {
     try {
         const [rows] = await pool.query(`SELECT password FROM ${cfg.dbConfig.prefix}system`);
-        console.log("pwd")
-        console.log(rows)
         return rows[0] || null;
     } catch (err) {
         throw err;

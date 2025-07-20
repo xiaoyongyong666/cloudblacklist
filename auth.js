@@ -1,19 +1,17 @@
 const fs = require('fs');
-const path = require('path');
 const db = require('./db');
 const md5 = require('md5');
 
-const ACCOUNT_FILE = path.join(__dirname, 'ac.json');
 
-function authenticate(req, res, next) {
+async function authenticate(req, res, next) {
     const { username, password } = req.body;
 
     try {
 
-        const dbuser = db.getAccountName();
-        const dbpwd = db.getAccountPwd();
-
-        if (username === dbuser && md5(password) === dbpwd) {
+        const dbuser = await db.getAccountName();
+        const dbpwd = await db.getAccountPwd();
+        if (username === dbuser.username && md5(password) === dbpwd.password) {
+            console.log(2)
             req.session.authenticated = true;
             req.session.username = username;
             next();
@@ -29,7 +27,7 @@ function checkAdmin(req, res, next) {
     if (req.session.authenticated) {
         next();
     } else {
-        res.status(404).send('Not Found');
+        res.redirect('/admin/login');
     }
 }
 

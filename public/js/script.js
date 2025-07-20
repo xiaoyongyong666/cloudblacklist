@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
         imageList.innerHTML = '<div class="loading">加载中...</div>';
 
         try {
-            const response = await fetch('/dext/images');
+            const response = await fetch('/admin/images');
             const images = await response.json();
 
             if (images.length === 0) {

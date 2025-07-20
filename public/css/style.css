@@ -3,7 +3,7 @@
     --danger: #e74c3c;
     --success: #2ecc71;
     --warning: #f39c12;
-    --dark: #2c3e50;
+    --dark: #2d77c2;
     --light: #ecf0f1;
 }
 
@@ -27,7 +27,7 @@ body {
 }
 
 .header {
-    background: linear-gradient(135deg, var(--dark), #1a2530);
+    background: linear-gradient(135deg, var(--dark), #97c1eb);
     color: white;
     padding: 30px 0;
     margin-bottom: 30px;
@@ -663,4 +663,18 @@ body {
 .hljs-type,
 .hljs-selector-id {
     font-weight: bold;
+}
+
+a {
+
+    color: #0069d9;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+ul {
+    margin-bottom: 0;
 }

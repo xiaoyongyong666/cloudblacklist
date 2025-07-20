@@ -1,0 +1,11 @@
+<div class="admin-nav">
+    <div class="nav-container">
+        <a href="/admin" class="nav-logo">云黑管理系统</a>
+        <ul class="nav-menu">
+            <li><a href="/admin" class="<%= currentPage === 'home' ? 'active' : '' %>">首页</a></li>
+            <li><a href="/admin/list" class="<%= currentPage === 'list' ? 'active' : '' %>">黑名单列表</a></li>
+            <li><a href="/admin/add" class="<%= currentPage === 'add' ? 'active' : '' %>">添加黑名单</a></li>
+            <li><a href="/admin/logout">退出登录</a></li>
+        </ul>
+    </div>
+</div>
