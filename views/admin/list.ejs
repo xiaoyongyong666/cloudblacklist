@@ -11,12 +11,12 @@
 <body>
     <div class="admin-nav">
         <div class="nav-container">
-            <a href="/dext" class="nav-logo">云黑管理系统</a>
+            <a href="/admin" class="nav-logo">云黑管理系统</a>
             <ul class="nav-menu">
-                <li><a href="/dext">首页</a></li>
-                <li><a href="/dext/list" class="active">黑名单列表</a></li>
-                <li><a href="/dext/add">添加黑名单</a></li>
-                <li><a href="/dext/logout">退出登录</a></li>
+                <li><a href="/admin">首页</a></li>
+                <li><a href="/admin/list" class="active">黑名单列表</a></li>
+                <li><a href="/admin/add">添加黑名单</a></li>
+                <li><a href="/admin/logout">退出登录</a></li>
             </ul>
         </div>
     </div>
@@ -24,7 +24,7 @@
     <div class="container">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1>黑名单列表</h1>
-            <a href="/dext/add" class="btn btn-success">添加记录</a>
+            <a href="/admin/add" class="btn btn-success">添加记录</a>
         </div>
 
         <div class="card">
@@ -66,9 +66,9 @@
                                                 <%= new Date(item.updated_at).toLocaleDateString() %>
                                             </td>
                                             <td>
-                                                <a href="/dext/edit?qq=<%= item.qq %>"
+                                                <a href="/admin/edit?qq=<%= item.qq %>"
                                                     class="btn btn-sm btn-warning">编辑</a>
-                                                <a href="/dext/del?qq=<%= item.qq %>" class="btn btn-sm btn-danger"
+                                                <a href="/admin/del?qq=<%= item.qq %>" class="btn btn-sm btn-danger"
                                                     onclick="return confirm('确定要删除这条记录吗？')">删除</a>
                                             </td>
                                         </tr>

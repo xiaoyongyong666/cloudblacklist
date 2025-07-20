@@ -12,12 +12,12 @@
 <body>
     <div class="admin-nav">
         <div class="nav-container">
-            <a href="/dext" class="nav-logo">云黑管理系统</a>
+            <a href="/admin" class="nav-logo">云黑管理系统</a>
             <ul class="nav-menu">
-                <li><a href="/dext">首页</a></li>
-                <li><a href="/dext/list">黑名单列表</a></li>
-                <li><a href="/dext/add" class="active">添加黑名单</a></li>
-                <li><a href="/dext/logout">退出登录</a></li>
+                <li><a href="/admin">首页</a></li>
+                <li><a href="/admin/list">黑名单列表</a></li>
+                <li><a href="/admin/add" class="active">添加黑名单</a></li>
+                <li><a href="/admin/logout">退出登录</a></li>
             </ul>
         </div>
     </div>
@@ -28,7 +28,7 @@
         <div class="card">
             <div class="card-header">填写信息</div>
             <div class="card-body">
-                <form action="/dext/add" method="POST">
+                <form action="/admin/add" method="POST">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -59,7 +59,7 @@
 
                     <div class="form-group mt-4">
                         <button type="submit" class="btn btn-primary">添加记录</button>
-                        <a href="/dext/list" class="btn btn-secondary">取消</a>
+                        <a href="/admin/list" class="btn btn-secondary">取消</a>
                     </div>
                 </form>
             </div>

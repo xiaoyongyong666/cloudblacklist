@@ -29,7 +29,7 @@ const createDOMPurify = require('dompurify');
 const { JSDOM } = require('jsdom');
 const hljs = require('highlight.js');
 const package = require('./package.json');
-var cfg = require('./config')
+const cfg = require('./config')
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -80,7 +80,7 @@ app.use(bodyParser.json());
 app.use(express.static('public'));
 app.use(fileUpload());
 app.use(session({
-    secret: 'fuckyoudext',
+    secret: 'spcbl',
     resave: false,
     saveUninitialized: true,
     cookie: { maxAge: 20 * 60 * 1000 }
@@ -269,7 +269,7 @@ app.get('/result', async (req, res) => {
     }
 });
 
-app.post('/dext/upload', auth.checkAdmin, async (req, res) => {
+app.post('/admin/upload', auth.checkAdmin, async (req, res) => {
     if (!req.files || Object.keys(req.files).length === 0) {
         return res.status(400).send('没有上传文件');
     }
@@ -287,7 +287,7 @@ app.post('/dext/upload', auth.checkAdmin, async (req, res) => {
     }
 });
 
-app.get('/dext/images', auth.checkAdmin, async (req, res) => {
+app.get('/admin/images', auth.checkAdmin, async (req, res) => {
     try {
         const files = fs.readdirSync(uploadDir);
         const images = files.filter(file => {
@@ -301,22 +301,22 @@ app.get('/dext/images', auth.checkAdmin, async (req, res) => {
     }
 });
 
-app.get('/dext/login', (req, res) => {
+app.get('/admin/login', (req, res) => {
     res.render('admin/login');
 });
 
-app.post('/dext/login', auth.authenticate, (req, res) => {
-    res.redirect('/dext');
+app.post('/admin/login', auth.authenticate, (req, res) => {
+    res.redirect('/admin');
 });
 
-app.get('/dext/logout', (req, res) => {
+app.get('/admin/logout', (req, res) => {
     req.session.destroy();
-    res.redirect('/dext/login');
+    res.redirect('/admin/login');
 });
 
-app.use('/dext', auth.checkAdmin);
+app.use('/admin', auth.checkAdmin);
 
-app.get('/dext', async (req, res) => {
+app.get('/admin', async (req, res) => {
     try {
         const count = await db.getBlacklistCount();
         res.render('admin/dashboard', { count });
@@ -325,7 +325,7 @@ app.get('/dext', async (req, res) => {
     }
 });
 
-app.get('/dext/list', async (req, res) => {
+app.get('/admin/list', async (req, res) => {
     try {
         const data = await db.getAllBlacklists();
         res.render('admin/list', { data });
@@ -334,11 +334,11 @@ app.get('/dext/list', async (req, res) => {
     }
 });
 
-app.get('/dext/add', (req, res) => {
+app.get('/admin/add', (req, res) => {
     res.render('admin/add');
 });
 
-app.post('/dext/add', async (req, res) => {
+app.post('/admin/add', async (req, res) => {
     const { qq, level, content } = req.body;
 
     if (!qq || !level || !content) {
@@ -347,13 +347,13 @@ app.post('/dext/add', async (req, res) => {
 
     try {
         await db.addBlacklist({ qq, level, content });
-        res.redirect('/dext/list');
+        res.redirect('/admin/list');
     } catch (err) {
         res.status(500).send('添加失败');
     }
 });
 
-app.get('/dext/edit', async (req, res) => {
+app.get('/admin/edit', async (req, res) => {
     const { qq } = req.query;
 
     if (!qq) {
@@ -371,7 +371,7 @@ app.get('/dext/edit', async (req, res) => {
     }
 });
 
-app.post('/dext/edit', async (req, res) => {
+app.post('/admin/edit', async (req, res) => {
     const { qq, level, content } = req.body;
 
     if (!qq || !level || !content) {
@@ -380,13 +380,13 @@ app.post('/dext/edit', async (req, res) => {
 
     try {
         await db.updateBlacklist({ qq, level, content });
-        res.redirect('/dext/list');
+        res.redirect('/admin/list');
     } catch (err) {
         res.status(500).send('更新失败');
     }
 });
 
-app.get('/dext/del', async (req, res) => {
+app.get('/admin/del', async (req, res) => {
     const { qq } = req.query;
 
     if (!qq) {
@@ -395,7 +395,7 @@ app.get('/dext/del', async (req, res) => {
 
     try {
         await db.deleteBlacklist(qq);
-        res.redirect('/dext/list');
+        res.redirect('/admin/list');
     } catch (err) {
         res.status(500).send('删除失败');
     }
