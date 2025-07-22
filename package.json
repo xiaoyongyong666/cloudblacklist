@@ -1,6 +1,6 @@
 {
   "name": "cloud_blacklist",
-  "version": "1.0.1-beta",
+  "version": "1.0.1-beta-$2",
   "main": "index.js",
   "scripts": {
     "commit": "node -e \"const msg = process.argv[1]; require('child_process').execSync('git add . && git commit -m \\\"' + msg + '\\\"', { stdio: 'inherit' });\"",
