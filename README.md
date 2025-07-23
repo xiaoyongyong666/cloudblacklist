@@ -5,7 +5,7 @@
  <div>
  <img src="https://img.shields.io/badge/node-v18.20.0-blue" alt= "node-v18.20.0" />
  <img src="https://img.shields.io/badge/MySQL-v5.7.26-red" alt= "mysql-v5.7.26" />
- <img src="https://img.shields.io/badge/lasted-v1.0.1_7.22-green" alt= "lasted-v1.0.1_7.22" />
+ <img src="https://img.shields.io/badge/lasted-v1.0.2_7.23-green" alt= "lasted-v1.0.2-beta_7.23" />
  <img src="https://img.shields.io/badge/QQ-1163246049-purple" alt= "QQ-1163246049" />
  <img src="https://img.shields.io/badge/WeChat-wx__zy0202-DAB327" alt= "wechat-wx_zy0202" />
  <img src="https://img.shields.io/badge/ReadMe-v1.2.1-9cf" alt= "readme-v1.2.1" />
@@ -26,7 +26,7 @@
 > [!WARNING]
 > 本项目基于 Node v18.20.0 + MySQL v5.7.26 开发 <br>
 > 其余版本请自行测试 <br>
-> 本文档版本 v1.2.1 所对应代码版本 v1.0.1_7.22
+> 本文档版本 v1.2.2 所对应代码版本 v1.0.2_7.23
 
 准备好所需的运行环境后，您可以通过以下步骤来开始使用本项目：
 1. 克隆或下载本项目到本地
@@ -37,7 +37,7 @@
 
 # 系统自定义
 - **数据库配置**：在 `install.lock` 中修改数据库配置
-- **端口配置**：在 `app.js` 中修改端口配置
+- **端口配置**：在 `settings/port.json` 中修改端口配置
 - **样式配置**：在 `public/css/style.css` 中修改您的样式
 
 # 系统更新
@@ -55,7 +55,7 @@
 | 安装系统 | 添加一键快速迅捷安装系统 |   ✅   | 2025.07.09 | 已上线 |
 | 接口重构 | 重构接口使其更加简洁快速 |   ✅   | 2025.07.20 | 已上线 |
 | 逻辑优化 | 优化部分逻辑使其更加高效 |   ✅   | 2025.07.20 | 已上线 |
-| 自定端口 | 自定义端口使其更加的安全 |   ❌   |    NULL    | 7.24前 |
+| 自定端口 | 自定义端口使其更加的安全 |   ✅   | 2025.07.23 | 已上线 |
 | 更改密码 | 更改后台管理密码保证安全 |   ❌   |    NULL    | 待排期 |
 | 日志管理 | 日志系统使系统运作透明化 |   ❌   |    NULL    | 待排期 |
 | 系统管理 | 快捷管理系统设置优化整站 |   ❌   |    NULL    | 待排期 |

@@ -30,9 +30,11 @@ const { JSDOM } = require('jsdom');
 const hljs = require('highlight.js');
 const package = require('./package.json');
 const cfg = require('./config')
+const settings = require('./settings/setting')
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = settings.getPort()
+console.log(PORT)
 
 marked.setOptions({
     breaks: true,
@@ -399,8 +401,8 @@ app.use((req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`服务器运行在 http://localhost:${PORT}`);
+    console.log(`服务器运行成功 访问 http://localhost:${PORT} 进入系统`);
     if (!isInstalled) {
-        console.log('系统未安装，请访问 http://localhost:3000/install 进行安装');
+        console.log(`系统未安装，请访问 http://localhost:${PORT}/install 进行安装`);
     }
 });
